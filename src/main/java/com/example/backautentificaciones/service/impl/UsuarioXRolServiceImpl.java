@@ -1,5 +1,6 @@
 package com.example.backautentificaciones.service.impl;
 
+import com.example.backautentificaciones.entity.UsuarioRolKey;
 import com.example.backautentificaciones.entity.UsuarioXRol;
 import com.example.backautentificaciones.repository.UsuarioXRolRepository;
 import com.example.backautentificaciones.service.UsuarioXRolService;
@@ -18,10 +19,22 @@ public class UsuarioXRolServiceImpl implements UsuarioXRolService {
     public List<UsuarioXRol> findUsuarioXRolAll() {
         return (List<UsuarioXRol>) usuarioxrolRepository.findAll();
     }
+    @Override
+    public List<UsuarioXRol> findUsuarioXRolByIdrol(UUID idrol) {
+        return usuarioxrolRepository.findAllByUsuarioRolKey_Idrol(idrol);
+    }
+    @Override
+    public List<UsuarioXRol> findUsuarioXRolByIdusuario(UUID idusuario) {
+        return usuarioxrolRepository.findAllByUsuarioRolKey_Idusuario(idusuario);
+    }
+    @Override
+    public UsuarioXRol getUsuarioXRol(UUID idrol, UUID idusuario) {
+        return usuarioxrolRepository.findById(new UsuarioRolKey(idrol, idusuario)).orElse(null);
+    }
 
     @Override
-    public UsuarioXRol getUsuarioXRol(UUID id) {
-        return usuarioxrolRepository.findById(id).orElse(null);
+    public UsuarioXRol getUsuarioXRol(UsuarioRolKey key) {
+        return usuarioxrolRepository.findById(key).orElse(null);
     }
 
     @Override
@@ -32,20 +45,18 @@ public class UsuarioXRolServiceImpl implements UsuarioXRolService {
 
     @Override
     public UsuarioXRol updateUsuarioXRol(UsuarioXRol usuarioxrol) {
-        UsuarioXRol usuarioxrolDB = this.getUsuarioXRol(usuarioxrol.getId());
+        UsuarioXRol usuarioxrolDB = this.getUsuarioXRol(usuarioxrol.getUsuarioRolKey());
         if (usuarioxrolDB == null) {
             return null;
         }
         //Actualizamos los valores del usuarioxrol:
-        usuarioxrolDB.setIdusuario(usuarioxrol.getIdusuario());
-        usuarioxrolDB.setIdrol(usuarioxrol.getIdrol());
-        usuarioxrolDB.setMotivo(usuarioxrol.getMotivo());
-        return usuarioxrolRepository.save(usuarioxrol);
+        usuarioxrolDB.getUsuarioRolKey().setIdrol(usuarioxrol.getUsuarioRolKey().getIdrol());
+        return usuarioxrolRepository.save(usuarioxrolDB);
     }
 
     @Override
-    public String deleteUsuarioXRol(UUID id) {
-        UsuarioXRol usuarioxrolDB = this.getUsuarioXRol(id);
+    public String deleteUsuarioXRol(UUID idrol, UUID idusuario){
+        UsuarioXRol usuarioxrolDB = this.getUsuarioXRol(idrol, idusuario);
         if (usuarioxrolDB == null) {
             return null;
         }
@@ -56,11 +67,18 @@ public class UsuarioXRolServiceImpl implements UsuarioXRolService {
         }
         return "ELIMINADO CON EXITO";
     }
-/*
     @Override
-    public List<UsuarioXRol> findAllByIdusuarioAndIdrol(UUID idusuario, UUID idrol){
-        return usuarioxrolRepository.findAllByIdusuarioAndIdrol("DNI", dni.toString());
+    public String deleteUsuarioXRol(UsuarioRolKey key){
+        UsuarioXRol usuarioxrolDB = this.getUsuarioXRol(key);
+        if (usuarioxrolDB == null) {
+            return null;
+        }
+        try{
+            usuarioxrolRepository.delete(usuarioxrolDB);
+        }catch (Exception e){
+            return "ERROR INTERNO";
+        }
+        return "ELIMINADO CON EXITO";
     }
 
- */
 }

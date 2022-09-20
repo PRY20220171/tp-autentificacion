@@ -77,7 +77,7 @@ public class RolController {
         }
         return ResponseEntity.ok(rolDelete);
     }
-
+/*
     @Autowired
     ProducerService rabbitMQSender;
 
@@ -86,6 +86,7 @@ public class RolController {
         rabbitMQSender.sendMsg(new Rol());
         return "Message sent to the RabbitMQ JavaInUse Successfully";
     }
+ */
 
 
 

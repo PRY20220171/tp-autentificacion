@@ -81,10 +81,13 @@ public class UsuarioController {
     @Autowired
     ProducerService rabbitMQSender;
 
-    @GetMapping(value = "/test")
-    public String producer() {
-        rabbitMQSender.sendMsg(new Usuario());
-        return "Message sent to the RabbitMQ JavaInUse Successfully";
+    @GetMapping(value = "/test/{id}")
+    public ResponseEntity<Usuario> producer(@PathVariable("id") String id) {
+        Usuario res = (Usuario) rabbitMQSender.sendMsg(id);
+        if(res==null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(res);
     }
 
 

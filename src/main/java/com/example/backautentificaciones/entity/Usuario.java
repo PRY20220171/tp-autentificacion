@@ -1,6 +1,5 @@
 package com.example.backautentificaciones.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,10 +14,8 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.UUID;
 
-//import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -34,7 +31,6 @@ public class Usuario  implements Serializable {
     @Id
     @Column("idusuario")
     @CassandraType(type = CassandraType.Name.UUID)
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @PrimaryKey
     private UUID id;
 

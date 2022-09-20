@@ -2,20 +2,40 @@ package com.example.backautentificaciones.service.impl;
 
 import com.example.backautentificaciones.entity.Usuario;
 import com.example.backautentificaciones.service.ProducerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 public class ProducerServiceImpl implements ProducerService {
-     @Autowired
+    @Autowired
     private AmqpTemplate amqpTemplate;
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private DirectExchange exchange;
+    @Value("${spring.rabbitmq.routingkey}")
+    private String routingkey;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void sendMsg(Usuario object) {
-        amqpTemplate.convertSendAndReceive("salud.usuarios.exchange","salud.usuarios.routingkey",object);
+    public Object sendMsg(String idObj) {
+        try{
+            Object response = amqpTemplate.convertSendAndReceive(exchange.getName(), routingkey, idObj);
+            if(response!=null){
+                return objectMapper.readValue(response.toString(), Usuario.class);
+            }
+            else{
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

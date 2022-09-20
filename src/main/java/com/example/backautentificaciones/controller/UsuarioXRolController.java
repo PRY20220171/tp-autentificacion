@@ -22,9 +22,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
-@RequestMapping("/usuariosxroles")
+//@RestController
+//@RequestMapping("/usuariosxroles")
 public class UsuarioXRolController {
+    /*
+    //TODO: Implementar metodos en Rol y Usuario respectivamente
     @Autowired
     private UsuarioXRolService usuarioxrolService;
 
@@ -77,7 +79,6 @@ public class UsuarioXRolController {
         }
         return ResponseEntity.ok(usuarioxrolDelete);
     }
-
     @Autowired
     ProducerService rabbitMQSender;
 
@@ -89,4 +90,5 @@ public class UsuarioXRolController {
 
 
 
+*/
 }
